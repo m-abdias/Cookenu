@@ -9,13 +9,18 @@ import {
 import logo from '../../assets/logo.png'
 import { Button, TextField } from '@mui/material'
 import useFrom from '../../hooks/useForm.js'
+import useUnprotectedPage from '../../hooks/useUnprotectedPage'
+import { signUp } from '../../services/user'
 
-const SignupPage = () => {
+const SignupPage = ({ setRightButtonText }) => {
+  useUnprotectedPage()
   const navigate = useNavigate()
   const [form, onChange, clear] = useFrom({ name: '', email: '', password: '' })
 
   const onSubmitForm = event => {
     event.preventDefault()
+    console.log(form)
+    signUp(form, clear, navigate, setRightButtonText)
   }
 
   return (

@@ -10,22 +10,17 @@ import {
 import logo from '../../assets/logo.png'
 import { Button, TextField } from '@mui/material'
 import useFrom from '../../hooks/useForm.js'
-import axios from 'axios'
-import { BASE_URL } from '../../constants/urls'
+import { login } from '../../services/user'
+import useUnprotectedPage from '../../hooks/useUnprotectedPage'
 
-const LoginPage = () => {
+const LoginPage = ({ setRightButtonText }) => {
+  useUnprotectedPage()
   const navigate = useNavigate()
   const [form, onChange, clear] = useFrom({ email: '', password: '' })
   const onSubmitForm = event => {
     event.preventDefault()
-    login()
-  }
-
-  const login = () => {
-    axios
-      .post(`${BASE_URL}/user/login`, form)
-      .then(res => console.log(res))
-      .catch(err => console.log(err))
+    //chamar a requisição de login
+    login(form, clear, navigate, setRightButtonText)
   }
 
   return (
