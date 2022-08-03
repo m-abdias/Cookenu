@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { goToSignup } from '../../routes/Coordinator'
 import {
@@ -8,19 +8,23 @@ import {
   SignUpButtonContainer
 } from './styled'
 import logo from '../../assets/logo.png'
-import { Button, TextField } from '@mui/material'
-import useFrom from '../../hooks/useForm.js'
+import { Button, CircularProgress, TextField } from '@mui/material'
+import useForm from '../../hooks/useForm.js'
 import { login } from '../../services/user'
 import useUnprotectedPage from '../../hooks/useUnprotectedPage'
 
 const LoginPage = ({ setRightButtonText }) => {
   useUnprotectedPage()
   const navigate = useNavigate()
-  const [form, onChange, clear] = useFrom({ email: '', password: '' })
+
+  // o estado inicial é falso, no início não esta fazendo nada
+  const [isLoading, setIsLoading] = useState(false)
+
+  const [form, onChange, clear] = useForm({ email: '', password: '' })
   const onSubmitForm = event => {
     event.preventDefault()
     //chamar a requisição de login
-    login(form, clear, navigate, setRightButtonText)
+    login(form, clear, navigate, setRightButtonText, setIsLoading)
   }
 
   return (
@@ -57,7 +61,11 @@ const LoginPage = ({ setRightButtonText }) => {
             color={'primary'}
             margin={'normal'}
           >
-            Fazer Login
+            {isLoading ? (
+              <CircularProgress color="inherit" />
+            ) : (
+              <p>Fazer Login</p>
+            )}
           </Button>
         </form>
       </InputsContainer>

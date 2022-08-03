@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   InputsContainer,
@@ -7,20 +7,24 @@ import {
   SignUpButtonContainer
 } from './styled'
 import logo from '../../assets/logo.png'
-import { Button, TextField } from '@mui/material'
-import useFrom from '../../hooks/useForm.js'
+import { Button, CircularProgress, TextField } from '@mui/material'
+import useForm from '../../hooks/useForm.js'
 import useUnprotectedPage from '../../hooks/useUnprotectedPage'
 import { signUp } from '../../services/user'
 
 const SignupPage = ({ setRightButtonText }) => {
   useUnprotectedPage()
   const navigate = useNavigate()
-  const [form, onChange, clear] = useFrom({ name: '', email: '', password: '' })
+
+  // o estado inicial é falso, no início não esta fazendo nada
+  const [isLoading, setIsLoading] = useState(false)
+
+  const [form, onChange, clear] = useForm({ name: '', email: '', password: '' })
 
   const onSubmitForm = event => {
     event.preventDefault()
     console.log(form)
-    signUp(form, clear, navigate, setRightButtonText)
+    signUp(form, clear, navigate, setRightButtonText, setIsLoading)
   }
 
   return (
@@ -69,7 +73,11 @@ const SignupPage = ({ setRightButtonText }) => {
             color={'primary'}
             margin={'normal'}
           >
-            Fazer Cadastro
+            {isLoading ? (
+              <CircularProgress color="inherit" />
+            ) : (
+              <p>Fazer Cadastro</p>
+            )}
           </Button>
         </form>
       </InputsContainer>
